@@ -6,7 +6,7 @@ if [ ! -f video.mp4 ]; then
 fi
 
 # Rulează live pe loop infinit
-ffmpeg -re -stream_loop -1 -i video.mp4 \
+ffmpeg -nostdin -re -stream_loop -1 -i video.mp4 \
 -c:v libx264 -preset veryfast -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p \
 -c:a aac -b:a 128k -ar 44100 \
 -f flv rtmp://a.rtmp.youtube.com/live2/YOUR_STREAM_KEY
