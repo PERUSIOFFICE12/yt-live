@@ -38,7 +38,7 @@ if [ ! -s video.mp4 ]; then
 fi
 
 # Cheia ta de streaming YouTube Live
-STREAM_KEY="bczq-zgwt-j877-ktv9-4wvw"
+STREAM_KEY="jw7v-0ggh-a41b-qbwp-ejsz"
 log_message "Folosind cheia de streaming: ${STREAM_KEY:0:8}..."
 
 # Verifică memoria disponibilă
