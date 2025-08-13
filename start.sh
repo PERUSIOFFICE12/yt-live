@@ -51,17 +51,20 @@ RESTART_COUNT=0
 while true; do
     log_message "Încercare streaming #$((RESTART_COUNT + 1))"
     
-    # Streaming cu setări optimizate
+    # Streaming cu setări optimizate și stabile
     timeout 3600 ffmpeg -nostdin -re -stream_loop -1 -i video.mp4 \
         -c:v libx264 \
-        -preset ultrafast \
+        -preset veryfast \
         -tune zerolatency \
-        -maxrate 2500k \
-        -bufsize 5000k \
+        -b:v 2000k \
+        -minrate 2000k \
+        -maxrate 2000k \
+        -bufsize 4000k \
         -pix_fmt yuv420p \
         -g 60 \
         -keyint_min 60 \
-        -x264-params "nal-hrd=cbr" \
+        -sc_threshold 0 \
+        -x264-params "nal-hrd=cbr:force-cfr=1" \
         -c:a aac \
         -b:a 128k \
         -ar 44100 \
