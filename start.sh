@@ -37,8 +37,14 @@ if [ ! -s video.mp4 ]; then
     exit 1
 fi
 
-# Cheia ta de streaming YouTube Live
-STREAM_KEY="jw7v-0ggh-a41b-qbwp-ejsz"
+# Cheia de streaming YouTube Live din variabila de mediu
+if [ -z "$YT_KEY" ]; then
+    log_message "EROARE: Variabila de mediu YT_KEY nu este setată!"
+    log_message "Rulează: export YT_KEY='cheia-ta-youtube'"
+    exit 1
+fi
+
+STREAM_KEY="$YT_KEY"
 log_message "Folosind cheia de streaming: ${STREAM_KEY:0:8}..."
 
 # Verifică memoria disponibilă
