@@ -38,18 +38,17 @@ if [ ! -s video.mp4 ]; then
 fi
 
 # Cheia ta de streaming YouTube Live
-STREAM_KEY="b1u3-2mbf-3532-8u2u-5yfe"
+STREAM_KEY="bczq-zgwt-j877-ktv9-4wvw"
 log_message "Folosind cheia de streaming: ${STREAM_KEY:0:8}..."
 
 # Verifică memoria disponibilă
 AVAILABLE_MEM=$(free -m | awk 'NR==2{printf "%.1f", $7/1024}')
 log_message "Memorie disponibilă: ${AVAILABLE_MEM}GB"
 
-# Loop pentru restart automat
+# Loop infinit pentru restart automat
 RESTART_COUNT=0
-MAX_RESTARTS=5
 
-while [ $RESTART_COUNT -lt $MAX_RESTARTS ]; do
+while true; do
     log_message "Încercare streaming #$((RESTART_COUNT + 1))"
     
     # Streaming cu setări optimizate
@@ -90,16 +89,8 @@ while [ $RESTART_COUNT -lt $MAX_RESTARTS ]; do
     esac
     
     RESTART_COUNT=$((RESTART_COUNT + 1))
-    
-    if [ $RESTART_COUNT -lt $MAX_RESTARTS ]; then
-        log_message "Așteptare 10 secunde înainte de restart..."
-        sleep 10
-    fi
+    log_message "Așteptare 10 secunde înainte de restart... (încercare #$RESTART_COUNT)"
+    sleep 10
 done
-
-if [ $RESTART_COUNT -eq $MAX_RESTARTS ]; then
-    log_message "EROARE: Prea multe restarturi eșuate!"
-    exit 1
-fi
 
 log_message "Script terminat"
