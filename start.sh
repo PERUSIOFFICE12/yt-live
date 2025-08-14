@@ -56,36 +56,30 @@ MAX_RESTARTS=999999  # Practic infinit
 while [ $RESTART_COUNT -lt $MAX_RESTARTS ]; do
     log_message "Încercare streaming #$((RESTART_COUNT + 1))"
     
-    # Setări optimizate pentru 1920x1080p și streaming continuu
-    ffmpeg -nostdin -hide_banner -loglevel info \
+    # Setări ultra-optimizate pentru consum minim de resurse
+    ffmpeg -nostdin -hide_banner -loglevel error \
         -re -stream_loop -1 -i video.mp4 \
         -c:v libx264 \
-        -preset veryfast \
+        -preset superfast \
         -tune zerolatency \
-        -profile:v main \
-        -level 4.0 \
-        -vf "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,fps=30" \
-        -b:v 4500k \
-        -maxrate 4500k \
-        -minrate 4500k \
-        -bufsize 9000k \
+        -profile:v baseline \
+        -level 3.1 \
+        -s 1280x720 \
+        -r 30 \
+        -b:v 2000k \
+        -maxrate 2000k \
+        -bufsize 2000k \
         -pix_fmt yuv420p \
         -g 60 \
-        -keyint_min 60 \
+        -keyint_min 30 \
         -sc_threshold 0 \
-        -x264-params "nal-hrd=cbr:force-cfr=1:bframes=2:b-adapt=0:ref=1:subme=1:me_range=16:rc-lookahead=10:weightb=0:weightp=0:8x8dct=0:trellis=0" \
+        -x264-params "nal-hrd=cbr:ref=1:subme=1:me_range=8:rc-lookahead=5:weightb=0:weightp=0:8x8dct=0:trellis=0:aq-mode=0:mbtree=0:fast-pskip=1:mixed-refs=0" \
         -c:a aac \
-        -b:a 160k \
-        -ar 48000 \
+        -b:a 96k \
+        -ar 44100 \
         -ac 2 \
-        -af "aresample=async=1:min_hard_comp=0.100000:first_pts=0" \
         -f flv \
-        -flvflags no_duration_filesize+no_metadata \
-        -rtmp_buffer 5000k \
-        -rtmp_live live \
-        -rtmp_pageurl "" \
-        -rtmp_swfurl "" \
-        -rtmp_tcurl "rtmp://a.rtmp.youtube.com/live2" \
+        -flvflags no_duration_filesize \
         rtmp://a.rtmp.youtube.com/live2/$STREAM_KEY 2>&1 | tee -a "$LOG_FILE"
     
     EXIT_CODE=$?
